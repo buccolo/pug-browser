@@ -10,6 +10,11 @@
 		margin: 0px;
 	}
 	
+	div {
+		width: 600px;
+		float: left;
+	}
+	
 	* {
 		margin: 0;
 		padding: 0;
@@ -68,10 +73,22 @@
 		
 	}
 	
+	var columnBalancer = true;
+	
 	function displayImages(data){
 		$.each(data.response.posts, function(id, obj){
-			$('#tumblr').append('<img class=pug src="' + obj.photos[0].alt_sizes[1].url + '"/>');
+			if (columnBalancer){
+				appendImage(1, obj.photos[0].alt_sizes[1].url);
+				columnBalancer = !columnBalancer;
+			} else {
+				appendImage(2, obj.photos[0].alt_sizes[1].url);
+				columnBalancer = !columnBalancer;
+			}
 		});
+	}
+	
+	function appendImage(index, url){
+		$('#tumblr-col' + index).append('<img class=pug src="' + url + '"/>');
 	}
 	
 
@@ -79,7 +96,10 @@
 </script>
 </head>
 <body>	
-	<div id="tumblr">
+	<div id="tumblr-col1">
+	
+	</div>
+	<div id="tumblr-col2">
 	
 	</div>
 </body>
