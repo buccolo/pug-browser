@@ -1,0 +1,86 @@
+<html>
+<title>Pug Browser | The ultimate cuteness explorer.</title>
+<head>
+	
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+<style>
+	img.pug {
+		width: 600px;
+		margin: 0px;
+	}
+	
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	
+	body {
+		background: black url("http://28.media.tumblr.com/avatar_b2b9e9444354_128.png") repeat;
+	}
+	
+</style>
+<script>
+	var offset = 0;
+	var limit = 5;
+	
+	var urls = [ 
+	"fuckyeahpugs",
+	"puugs",
+	"sybilthepug",
+	"pugaholic",
+	"ppugss"
+	];
+
+	$(document).ready(function(){
+			
+		loadTumblrs();
+		offset += limit;
+		
+		var $html = $('html');
+		var $body = $('body')
+		var loading = false;
+		
+		$(window).scroll(function(){ 
+			
+			/*	Is this really how infinite scroll is done?
+			*	HTML has always 0 scrollTop, but accurate height.
+			*	BODY has always the same height, but accurate scrollTop.
+			*/
+			if (!loading && $body.scrollTop() / $html.height() > 0.85){
+				loadTumblrs();
+				offset += limit;
+				loading = true;
+			} else if ($body.scrollTop() / $html.height() < 0.85){
+				loading = false;
+			}
+		});
+	});
+	
+	function loadTumblrs(){
+		$.each(urls, function(id, tumblr){
+			console.log(tumblr);
+			$.ajax({ 
+				url: 'http://api.tumblr.com/v2/blog/'+tumblr+'.tumblr.com/posts/photo?api_key=eJxQr3j1vwXQY9tA3wwFlgTA2C4dX4arDYRhv6oxixhfJZ3f3C&jsonp=displayImages&limit='+limit+'&offset='+offset, 
+				dataType:"script", 
+			});	
+		});
+		
+	}
+	
+	function displayImages(data){
+		$.each(data.response.posts, function(id, obj){
+			$('#tumblr').append('<img class=pug src="' + obj.photos[0].alt_sizes[1].url + '"/>');
+		});
+	}
+	
+
+
+</script>
+</head>
+<body>	
+	<div id="tumblr">
+	
+	</div>
+</body>
+</html>
