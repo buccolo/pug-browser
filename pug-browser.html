@@ -6,8 +6,11 @@
 
 <style>
 	img.pug {
-		width: 600px;
 		margin: 0px;
+	}
+	
+	div {
+		float: left;
 	}
 	
 	* {
@@ -32,8 +35,14 @@
 	"ppugss"
 	];
 
+	var half_page = 0;
+	 
 	$(document).ready(function(){
 			
+		half_page = $('html').width()/2;
+		$('#tumblr-col1').width(half_page);
+		$('#tumblr-col2').width(half_page);
+		
 		loadTumblrs();
 		offset += limit;
 		
@@ -68,10 +77,22 @@
 		
 	}
 	
+	var columnBalancer = true;
+	
 	function displayImages(data){
 		$.each(data.response.posts, function(id, obj){
-			$('#tumblr').append('<img class=pug src="' + obj.photos[0].alt_sizes[1].url + '"/>');
+			if (columnBalancer){
+				appendImage(1, obj.photos[0].alt_sizes[1].url);
+				columnBalancer = !columnBalancer;
+			} else {
+				appendImage(2, obj.photos[0].alt_sizes[1].url);
+				columnBalancer = !columnBalancer;
+			}
 		});
+	}
+	
+	function appendImage(index, url){
+		$('#tumblr-col' + index).append('<img class=pug src="' + url + '" style="width: '+half_page+';"/>');
 	}
 	
 
@@ -79,7 +100,10 @@
 </script>
 </head>
 <body>	
-	<div id="tumblr">
+	<div id="tumblr-col1">
+	
+	</div>
+	<div id="tumblr-col2">
 	
 	</div>
 </body>
